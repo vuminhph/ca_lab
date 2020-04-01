@@ -1,30 +1,29 @@
-#Laboratory Week 3, Home Assignment 1
-#Pham Vu Minh
-#Check if the sum of 2 number overflows
+# Laboratory Week 3, Assignment 1
+# Pham Vu Minh
 
 .data
-	num1:	.word	0xf92189e2
-	num2:	.word	0x09281b2a
+	prompt: .asciiz "\nEnter the value of i: "
 .text
+	li 	$s2, 1			# j = 1 by default
+	li	$t1, 1			# x = 1
+	li	$t2, 2			# y = 2
+	li	$t3, 3			# z = 3
 	
-	lw	$s1,	num1
-	lw	$s2,	num2
-	add	$s3,	$s1, $s2
+	la 	$a0, prompt		# prompt user for the value of i
+	li	$v0, 4
+	syscall
+	move	$a0, $a1
+	li	$v0, 5
+	syscall
+	move	$v0, $s1
 start:
-	li	$t0, 0			#No Overflow is default status
-	addu	$s3, $s1, $s2		# s3 = s1 + s2
-	xor 	$t1, $s1, $s2		#Test if $s1 and $s2 have the same sign
-	
-	beqz	$t1, EXIT		#If not, exit
-	slt	$t2, $s3, $s1	
-	bltz	$s1, NEGATIVE		#Test if $s1 and $s2 is negative
-	beq	$t2, $zero, EXIT	#s1 and s2 are positive, so if s3 is not less than s1
-					#the result is not overlow
-	j	OVERFLOW
-NEGATIVE:
-	bne	$t2, $zero, EXIT	#s1 and s2 are negative, so if s3 is less than s1 and s2
-					#the result is not overflow
-OVERFLOW:
-	li	$t0, 1			#The result is overflow
-EXIT:					
-	
+	slt	$t0, $s2, $s1		# j < i
+	bne  	$t0, $zero, else	# branch to else if j < i
+	addi	$t1, $t1, 1		#then part: x = x + 1
+	addi	$t3, $zero, 1		# z = 1
+	j	endif			# skip "else" part
+else: 	addi	$t2, $t2, -1		# begin else part: y = y - 1
+	add 	$t3, $t3, $t3		# z = 2 * z
+endif:
+	li	$v0, 10
+	syscall 
