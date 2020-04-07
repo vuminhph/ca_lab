@@ -15,7 +15,7 @@
 	move	$a0, $a1
 	li	$v0, 5
 	syscall
-	move	$v0, $s1
+	move	$s1, $v0
 start:
 	slt	$t0, $s2, $s1		# j < i
 	bne  	$t0, $zero, else	# branch to else if j < i

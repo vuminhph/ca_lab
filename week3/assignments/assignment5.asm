@@ -1,4 +1,4 @@
-# Laboratory Week 3, Assignment 2
+# Laboratory Week 3, Assignment 5
 # Pham Vu Minh
 
 .data
@@ -26,8 +26,30 @@ loop:
 	add $t1,$t1,$s2		# t1 store the address of A[i]
 	lw $t0,0($t1) 		# load value of A[i] in $t0
 	add $s5,$s5,$t0		# sum=sum+A[i]
-	bne $s1,$s3,loop 	# if i != n, goto loop
 	
+#	b condition_b
+	b condition_c
+#	b condition_d	
+	
+condition_a:
+	slt $t2, $s1, $s3	# if i < n 
+	bnez $t2, loop		# if true, start loop again
+	j end_loop
+condition_b:
+	slt $t2, $s3, $s1	# if n < i
+	beqz $t2, loop		# if not true, start loop again
+	j end_loop
+condition_c:
+	sge  $t3, $s5, $zero		# check if sum >= 0
+	slti $t4, $s1, 10		# check if i < 10
+	and  $t5, $s5, $s1		# and two conditions
+	
+	bnez $t5, loop			# both are true,, start loop again
+	j end_loop
+condition_d:
+	beq $t0, $zero, loop	# if A[i] == 0, start loop again
+
+end_loop:	
 	la $a0, output
 	li $v0, 4
 	syscall
